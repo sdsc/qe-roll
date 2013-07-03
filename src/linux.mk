@@ -57,5 +57,5 @@
 SRCDIRS = `find . -maxdepth 1 -type d \
 	-not -name CVS \
 	-not -name roll-test \
-        -not -name qe-modules
+        -not -name qe-modules \
 	-not -name .` qe-modules roll-test
