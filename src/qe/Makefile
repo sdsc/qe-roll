@@ -116,8 +116,8 @@ build:
 install::
 	mkdir -p -m755 $(ROOT)/$(PKGROOT)/bin
 	( \
-	  cd $(SOURCE)/bin; \
-          cp * $(ROOT)/$(PKGROOT)/bin \ 
+           cd $(SOURCE)/bin; \
+           cp * $(ROOT)/$(PKGROOT)/bin; \
 	)
 	mkdir -p $(REDHAT.ROOT)/src/build-qe-modules
 	cat qe.module | perl -pi -e "s!MODULEROOT!/opt/modulefiles/applications/qe!g;s!VERSION!$(VERSION)!g;" \
