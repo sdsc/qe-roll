@@ -119,6 +119,10 @@ install::
 	  cd $(SOURCE); \
           make install \
 	)
+        mkdir -p $(REDHAT.ROOT)/src/build-qe-modules
+        cat qe.module | perl -pi -e "s!MODULEROOT!/opt/modulefiles/applications/qe!g;s!VERSION!$(VERSION)!g;" \
+          > $(REDHAT.ROOT)/src/build-qe-modules/$(NAME).module
+
 
 clean::
 	rm -rf $(SOURCE)
