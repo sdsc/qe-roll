@@ -117,10 +117,12 @@ install::
 	mkdir -p -m755 $(ROOT)/$(PKGROOT)
 	( \
            cd $(SOURCE); \
-           mkdir $(ROOT)/$(PKGROOT/bin; \
+           mkdir $(ROOT)/$(PKGROOT)/bin; \
            cp bin/* $(ROOT)/$(PKGROOT)/bin; \
-           mkdir $(ROOT)/$(PKGROOT/tests; \
+           mkdir $(ROOT)/$(PKGROOT)/tests; \
            cp PW/tests/* $(ROOT)/$(PKGROOT)/tests; \
+           mkdir $(ROOT)/$(PKGROOT)/pseudo; \
+           cp pseudo/* $(ROOT)/$(PKGROOT)/pseudo \
 	)
 	mkdir -p $(REDHAT.ROOT)/src/build-qe-modules
 	cat qe.module | perl -pi -e "s!MODULEROOT!/opt/modulefiles/applications/qe!g;s!VERSION!$(VERSION)!g;" \
