@@ -1,0 +1,38 @@
+--- espresso-5.1/PW/tests/check-pw.x.j	2014-05-28 07:43:32.000000000 -0700
++++ patch-files/check-pw.x.j	2014-08-08 17:41:14.000000000 -0700
+@@ -2,7 +2,7 @@
+ 
+ # Automated checks for pw.x - PG 2007-2012
+ #
+-. ../../environment_variables
++. ROLLPREFIX/tests/environment_variables
+ #
+ # You shouldn't need to modify anything below this line.
+ #
+@@ -36,7 +36,7 @@
+ # taken from examples - not sure it is really needed
+ if test "`echo -e`" = "-e" ; then ECHO=echo ; else ECHO="echo -e" ; fi
+ 
+-ESPRESSO_ROOT=`cd ../../ ; pwd`
++ESPRESSO_ROOT=ROLLPREFIX
+ ESPRESSO_TMPDIR=$ESPRESSO_ROOT/tempdir/
+ ESPRESSO_PSEUDO=$ESPRESSO_ROOT/pseudo/
+ 
+@@ -244,7 +244,7 @@
+   # run the code in the scratch directory
+   #
+   cd $ESPRESSO_TMPDIR
+-  $PARA_PREFIX $ESPRESSO_ROOT/PW/src/pw.x $PARA_POSTFIX \
++  $PARA_PREFIX $ESPRESSO_ROOT/bin/pw.x $PARA_POSTFIX \
+         -i $TESTDIR/$name.in > $TESTDIR/$name.out
+   if test $? != 0; then
+      $ECHO "FAILED with error condition!"
+@@ -278,7 +278,7 @@
+      # run the code in the scratch directory
+      #
+      cd $ESPRESSO_TMPDIR
+-     $PARA_PREFIX $ESPRESSO_ROOT/PW/src/pw.x $PARA_POSTFIX \
++     $PARA_PREFIX $ESPRESSO_ROOT/bin/pw.x $PARA_POSTFIX \
+              -i $TESTDIR/$name.in$n > $TESTDIR/$name.out$n
+      if test $? != 0; then
+         $ECHO "FAILED with error condition!"

@@ -77,8 +77,7 @@ COMPILERSETUP = \
     . /etc/profile.d/modules.sh; \
     module load intel; \
     export MKLLIB=`find $${MKL_ROOT}/lib/* -maxdepth 0 | head -1`; \
-    export EXTLIB_FLAGS="-L$${MKLLIB} -Wl,--start-group -lmkl_intel_ilp64 \
-                    -lmkl_sequential -lmkl_core -Wl,--end-group -lpthread"; \
+    export EXTLIB_FLAGS="-L$${MKLLIB} -lmkl_rt -lpthread"; \
     module unload intel; \
     module load $(ROLLCOMPILER); \
   fi
@@ -103,30 +102,40 @@ MPISETUP = \
   export LD_LIBRARY_PATH=$${LD_LIBRARY_PATH}:$${MPI_HOME}/lib
 
 build: $(SRC_DIRS)
+	patch $(SOURCE_DIR)/PW/tests/check-pw.x.j patch-files/check-pw.x.j.patch
+	perl -pi -e "s!ROLLPREFIX!$(PKGROOT)!" $(SOURCE_DIR)/PW/tests/check-pw.x.j
+	patch $(SOURCE_DIR)/environment_variables patch-files/environment_variables.patch
+	perl -pi -e "s!ROLLPREFIX!$(PKGROOT)!" $(SOURCE_DIR)/environment_variables
 	( \
 	  $(COMPILERSETUP); \
 	  $(MPISETUP); \
           export CC=mpicc; \
           export FC=mpif90; \
+          export LDFLAGS=$${EXTLIB_FLAGS}; \
 	  cd $(SOURCE_DIR); \
-          ./configure --prefix=$(ROOT)/$(PKGROOT) --with-internal-blas=yes --with-internal-lapack=yes --enable-parallel; \
-	  $(MAKE) all\
+          if test "$(ROLLMPI)" != "openmpi"; then \
+          ./configure --prefix=$(ROOT)/$(PKGROOT) --with-scalapack=intel --enable-parallel; \
+          else \
+          ./configure --prefix=$(ROOT)/$(PKGROOT) --with-scalapack --enable-parallel; \
+          fi; \
+	  $(MAKE) all \
 	)
 	@echo "::: Package $(NAME) build complete :::"
 
 install::
 	mkdir -p -m755 $(ROOT)/$(PKGROOT)
+	mkdir -p $(REDHAT.ROOT)/src/build-qe-modules
 	( \
            cd $(SOURCE_DIR); \
            mkdir $(ROOT)/$(PKGROOT)/bin; \
            cp bin/* $(ROOT)/$(PKGROOT)/bin; \
            mkdir $(ROOT)/$(PKGROOT)/tests; \
            cp PW/tests/* $(ROOT)/$(PKGROOT)/tests; \
+           cp environment_variables $(ROOT)/$(PKGROOT)/tests; \
            mkdir $(ROOT)/$(PKGROOT)/pseudo; \
            cp pseudo/* $(ROOT)/$(PKGROOT)/pseudo \
-	)
-	mkdir -p $(REDHAT.ROOT)/src/build-qe-modules
-	cat qe.module | perl -pi -e "s!MODULEROOT!/opt/modulefiles/applications/qe!g;s!VERSION!$(VERSION)!g;" \
+        )
+	cat qe.module | perl -pi -e "s!MODULEROOT!/opt/modulefiles/applications/qe!g;s!VERSION!$(VERSION)!g;s!ROLLCOMPILER!$(ROLLCOMPILER)!g;s!ROLLMPI!$(ROLLMPI)!g;s!ROLLNETWORK!$(ROLLNETWORK)!g" \
           > $(REDHAT.ROOT)/src/build-qe-modules/$(NAME).module
 	@echo "::: Package $(NAME) install complete :::"
 
