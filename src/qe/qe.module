@@ -68,7 +68,8 @@ if { \$loadApps  }  {
 module-whatis "Quantum Expresso"
 module-whatis "Version: VERSION"
 prepend-path PATH /opt/qe/bin
-setenv PSEUDO /opt/qe/pseudo
+setenv PSEUDO_DIR /opt/qe/pseudo
+setenv ESPRESSO_PSEUDO /opt/qe/pseudo
 END
 
 chmod 0644  ROOT_PKGROOTMODULEROOT/VERSION

@@ -1,6 +1,6 @@
 NAME               = qe_$(ROLLCOMPILER)_$(ROLLMPI)_$(ROLLNETWORK)
 VERSION            = 5.1
-RELEASE            = 0
+RELEASE            = 2
 PKGROOT            = /opt/qe
 
 SRC_SUBDIR         = qe

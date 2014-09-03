@@ -35,11 +35,11 @@ fi
 mkdir $TESTFILE.dir
 cd $TESTFILE.dir
 cp -r /opt/qe/tests/* .
-/opt/qe/tests/check-pw.x.j *paw*.in
+/opt/qe/tests/check-pw.x.j paw-vcbfgs.in
 END
   close(OUT);
  `/bin/bash $TESTFILE.sh >& o`;
-  ok(`grep -c passed o` == 6,'quantum espresso works');
+  ok(`grep -c passed o` == 1,'quantum espresso works');
 }
 
 SKIP: {
