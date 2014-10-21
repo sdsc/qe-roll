@@ -53,18 +53,6 @@
 # IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 # 
 # @Copyright@
-#
-# $Log$
-
-ifndef ROLLCOMPILER
-  ROLLCOMPILER = gnu
-endif
-ifndef ROLLNETWORK
-  ROLLNETWORK = eth
-endif
-ifndef ROLLMPI
-  ROLLMPI = openmpi
-endif
 
 REDHAT.ROOT = $(CURDIR)/../../
 
@@ -72,34 +60,21 @@ REDHAT.ROOT = $(CURDIR)/../../
 include Rules.mk
 include pull.mk
 
-COMPILERSETUP = \
-  if test -e /etc/profile.d/modules.sh; then \
-    . /etc/profile.d/modules.sh; \
-    module load intel; \
-    export MKLLIB=`find $${MKL_ROOT}/lib/* -maxdepth 0 | head -1`; \
-    export EXTLIB_FLAGS="-L$${MKLLIB} -lmkl_rt -lpthread"; \
-    module unload intel; \
-    module load $(ROLLCOMPILER); \
-  fi
+COMPILERSETUP =  \
+  module load $(ROLLCOMPILER) || true; \
+  echo === Compiler and version ===; \
+  $(CC) --version
 
-ifeq ("$(ROLLNETWORK)", "eth")
-  MPIMODULE = $(ROLLMPI)
-else
-  MPIMODULE = $(ROLLMPI)_$(ROLLNETWORK)
-endif
+MKLSETUP = \
+  module load mkl || true; \
+  echo === MKL_ROOT ===; \
+  echo $${MKL_ROOT}; \
+  export MKLLIB=`find $${MKL_ROOT}/lib/* -maxdepth 0 | head -1`
 
 MPISETUP = \
-  if test -e /etc/profile.d/modules.sh; then \
-    . /etc/profile.d/modules.sh; \
-    module load $(MPIMODULE); \
-  fi; \
-  export MPI_HOME=`which mpicxx | perl -pe 's!/bin/.*!!'`; \
-  if test -z "$${MPI_HOME}"; then \
-    export MPI_HOME=/opt/$(ROLLMPI); \
-  fi; \
-  echo Using MPI from $${MPI_HOME}; \
-  export PATH=$${PATH}:$${MPI_HOME}/bin; \
-  export LD_LIBRARY_PATH=$${LD_LIBRARY_PATH}:$${MPI_HOME}/lib
+  module load $(ROLLMPI) || true; \
+  echo === MPIHOME ===; \
+  echo $${MPIHOME}
 
 build: $(SRC_DIRS)
 	patch $(SOURCE_DIR)/PW/tests/check-pw.x.j patch-files/check-pw.x.j.patch
@@ -108,35 +83,30 @@ build: $(SRC_DIRS)
 	perl -pi -e "s!ROLLPREFIX!$(PKGROOT)!" $(SOURCE_DIR)/environment_variables
 	( \
 	  $(COMPILERSETUP); \
+	  $(MKLSETUP); \
 	  $(MPISETUP); \
-          export CC=mpicc; \
-          export FC=mpif90; \
-          export LDFLAGS=$${EXTLIB_FLAGS}; \
+	  export CC=mpicc; \
+	  export FC=mpif90; \
+	  export LDFLAGS="-L$${MKLLIB} -lmkl_rt -lpthread"; \
 	  cd $(SOURCE_DIR); \
-          if test "$(ROLLMPI)" != "openmpi"; then \
-          ./configure --prefix=$(ROOT)/$(PKGROOT) --with-scalapack=intel --enable-parallel; \
-          else \
-          ./configure --prefix=$(ROOT)/$(PKGROOT) --with-scalapack --enable-parallel; \
-          fi; \
+	  ./configure --prefix=$(ROOT)/$(PKGROOT) \
+	              --with-scalapack --enable-parallel; \
 	  $(MAKE) all \
 	)
 	@echo "::: Package $(NAME) build complete :::"
 
 install::
-	mkdir -p -m755 $(ROOT)/$(PKGROOT)
-	mkdir -p $(REDHAT.ROOT)/src/build-qe-modules
+	mkdir -p -m 755 $(ROOT)/$(PKGROOT)
+	mkdir -p -m 755 $(ROOT)/$(PKGROOT)/bin
+	mkdir -p -m 755 $(ROOT)/$(PKGROOT)/tests
+	mkdir -p -m 755 $(ROOT)/$(PKGROOT)/pseudo
 	( \
-           cd $(SOURCE_DIR); \
-           mkdir $(ROOT)/$(PKGROOT)/bin; \
-           cp bin/* $(ROOT)/$(PKGROOT)/bin; \
-           mkdir $(ROOT)/$(PKGROOT)/tests; \
-           cp PW/tests/* $(ROOT)/$(PKGROOT)/tests; \
-           cp environment_variables $(ROOT)/$(PKGROOT)/tests; \
-           mkdir $(ROOT)/$(PKGROOT)/pseudo; \
-           cp pseudo/* $(ROOT)/$(PKGROOT)/pseudo \
-        )
-	cat qe.module | perl -pi -e "s!MODULEROOT!/opt/modulefiles/applications/qe!g;s!VERSION!$(VERSION)!g;s!ROLLCOMPILER!$(ROLLCOMPILER)!g;s!ROLLMPI!$(ROLLMPI)!g;s!ROLLNETWORK!$(ROLLNETWORK)!g" \
-          > $(REDHAT.ROOT)/src/build-qe-modules/$(NAME).module
+	  cd $(SOURCE_DIR); \
+	  cp bin/* $(ROOT)/$(PKGROOT)/bin; \
+	  cp PW/tests/* $(ROOT)/$(PKGROOT)/tests; \
+	  cp environment_variables $(ROOT)/$(PKGROOT)/tests; \
+	  cp pseudo/* $(ROOT)/$(PKGROOT)/pseudo \
+	)
 	@echo "::: Package $(NAME) install complete :::"
 
 clean::

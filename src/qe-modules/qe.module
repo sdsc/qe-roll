@@ -1,0 +1,8 @@
+#%Module1.0
+module-whatis "Quantum Expresso"
+module-whatis "Version: VERSION"
+setenv QEHOME /opt/qe
+prepend-path PATH /opt/qe/bin
+setenv PSEUDO_DIR /opt/qe/pseudo
+setenv ESPRESSO_PSEUDO /opt/qe/pseudo
+module load ROLLCOMPILER mkl

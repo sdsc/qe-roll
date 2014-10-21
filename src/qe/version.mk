@@ -1,15 +1,26 @@
-NAME               = qe_$(ROLLCOMPILER)_$(ROLLMPI)_$(ROLLNETWORK)
-VERSION            = 5.1
-RELEASE            = 2
-PKGROOT            = /opt/qe
+ifndef ROLLCOMPILER
+  ROLLCOMPILER = gnu
+endif
+COMPILERNAME := $(firstword $(subst /, ,$(ROLLCOMPILER)))
 
-SRC_SUBDIR         = qe
+ifndef ROLLMPI
+  ROLLMPI = openmpi
+endif
+MPINAME := $(firstword $(subst /, ,$(ROLLMPI)))
 
-SOURCE_NAME        = espresso
-SOURCE_VERSION     = $(VERSION)
-SOURCE_SUFFIX      = tar.gz
-SOURCE_PKG         = $(SOURCE_NAME)-$(SOURCE_VERSION).$(SOURCE_SUFFIX)
-SOURCE_DIR         = $(SOURCE_PKG:%.$(SOURCE_SUFFIX)=%)
+NAME           = qe_$(COMPILERNAME)_$(MPINAME)
+VERSION        = 5.1
+RELEASE        = 3
+PKGROOT        = /opt/qe
 
-TAR_GZ_PKGS        = $(SOURCE_PKG)
-RPM.EXTRAS = "AutoReq: no"
+SRC_SUBDIR     = qe
+
+SOURCE_NAME    = espresso
+SOURCE_SUFFIX  = tar.gz
+SOURCE_VERSION = $(VERSION)
+SOURCE_PKG     = $(SOURCE_NAME)-$(SOURCE_VERSION).$(SOURCE_SUFFIX)
+SOURCE_DIR     = $(SOURCE_PKG:%.$(SOURCE_SUFFIX)=%)
+
+TAR_GZ_PKGS    = $(SOURCE_PKG)
+
+RPM.EXTRAS     = AutoReq:No
