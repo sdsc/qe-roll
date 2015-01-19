@@ -58,33 +58,36 @@ REDHAT.ROOT = $(CURDIR)/../../
 
 -include $(ROCKSROOT)/etc/Rules.mk
 include Rules.mk
-include pull.mk
+include $(SDSCDEVEL)/Pull.mk
+include $(SDSCDEVEL)/Rules.mk
 
-COMPILERSETUP =  \
-  module load $(ROLLCOMPILER) || true; \
-  echo === Compiler and version ===; \
-  $(CC) --version
+$(NAME).spec: DESCRIPTION LICENSE
 
-MKLSETUP = \
-  module load mkl || true; \
-  echo === MKL_ROOT ===; \
-  echo $${MKL_ROOT}; \
-  export MKLLIB=`find $${MKL_ROOT}/lib/* -maxdepth 0 | head -1`
+DESCRIPTION:
+	$(MODULE_LOAD_CC); \
+	$(MODULE_LOAD_MPI); \
+	( \
+	  $(DESCRIBE_PKG); \
+	  $(DESCRIBE_CC); \
+	  $(DESCRIBE_MKL); \
+	  $(DESCRIBE_MPI) \
+	) > $@
 
-MPISETUP = \
-  module load $(ROLLMPI) || true; \
-  echo === MPIHOME ===; \
-  echo $${MPIHOME}
+LICENSE: $(SRC_DIRS)
+	$(CHECK_LICENSE_FILES)
+	echo GPLv2 > $@
 
 build: $(SRC_DIRS)
 	patch $(SOURCE_DIR)/PW/tests/check-pw.x.j patch-files/check-pw.x.j.patch
 	perl -pi -e "s!ROLLPREFIX!$(PKGROOT)!" $(SOURCE_DIR)/PW/tests/check-pw.x.j
 	patch $(SOURCE_DIR)/environment_variables patch-files/environment_variables.patch
 	perl -pi -e "s!ROLLPREFIX!$(PKGROOT)!" $(SOURCE_DIR)/environment_variables
+	-cp $(ATOMIC_PKG) $(NEB_PKG) $(PHONON_PKG) $(PWCOND_PKG) \
+	    $(TDDFPT_PKG) $(XSPECTRA_PKG) $(SOURCE_DIR)/archive/
 	( \
-	  $(COMPILERSETUP); \
-	  $(MKLSETUP); \
-	  $(MPISETUP); \
+	  $(MODULE_LOAD_CC); \
+	  $(MODULE_LOAD_MKL); \
+	  $(MODULE_LOAD_MPI); \
 	  export CC=mpicc; \
 	  export FC=mpif90; \
 	  export LDFLAGS="-L$${MKLLIB} -lmkl_rt -lpthread"; \
@@ -107,7 +110,11 @@ install::
 	  cp environment_variables $(ROOT)/$(PKGROOT)/tests; \
 	  cp pseudo/* $(ROOT)/$(PKGROOT)/pseudo \
 	)
+	cp patch-files/Ge.pbe-kjpaw.UPF $(ROOT)/$(PKGROOT)/pseudo/
+	$(INSTALL_LICENSE_FILES)
 	@echo "::: Package $(NAME) install complete :::"
 
 clean::
-	rm -rf $(SOURCE_DIR)
+	rm -rf $(SOURCE_DIR) DESCRIPTION LICENSE
+	rm -fr $(ATOMIC_DIR) $(NEB_DIR) $(PHONON_DIR) $(PWCOND_DIR) \
+	       $(TDDFPT_DIR) $(XSPECTRA_DIR) PlotPhon QHA
