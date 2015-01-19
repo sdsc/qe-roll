@@ -1,4 +1,4 @@
-# SDSC "qa" roll
+# SDSC "qe" roll
 
 ## Overview
 
@@ -62,26 +62,26 @@ To install, execute these instructions on a Rocks frontend:
 
 ```shell
 % rocks add roll *.iso
-% rocks enable roll qa
+% rocks enable roll qe
 % cd /export/rocks/install
 % rocks create distro
-% rocks run roll qa | bash
+% rocks run roll qe | bash
 ```
 
-In addition to the software itself, the roll installs qa environment
+In addition to the software itself, the roll installs qe environment
 module files in:
 
 ```shell
-/opt/modulefiles/applications/qa
+/opt/modulefiles/applications/qe
 ```
 
 
 ## Testing
 
-The qa-roll includes a test script which can be run to verify proper
+The qe-roll includes a test script which can be run to verify proper
 installation of the roll documentation, binaries and module files. To
 run the test scripts execute the following command(s):
 
 ```shell
-% /root/rolltests/qa.t 
+% /root/rolltests/qe.t 
 ```
