@@ -77,6 +77,14 @@ LICENSE: $(SRC_DIRS)
 	$(CHECK_LICENSE_FILES)
 	echo GPLv2 > $@
 
+COMPILE_FLAGS = -O2
+ifeq ("$(COMPILERNAME)","intel")
+  COMPILE_FLAGS = -O2 -xHOST
+else ifeq ("$(COMPILERNAME)","pgi")
+  COMPILE_FLAGS = -fast
+endif
+
+
 build: $(SRC_DIRS)
 	patch $(SOURCE_DIR)/PW/tests/check-pw.x.j patch-files/check-pw.x.j.patch
 	perl -pi -e "s!ROLLPREFIX!$(PKGROOT)!" $(SOURCE_DIR)/PW/tests/check-pw.x.j
@@ -90,6 +98,8 @@ build: $(SRC_DIRS)
 	  $(MODULE_LOAD_MPI); \
 	  export CC=mpicc; \
 	  export FC=mpif90; \
+          export CFLAGS="$(COMPILE_FLAGS)"; \
+          export FCFLAGS="$(COMPILE_FLAGS)"; \
 	  export LDFLAGS="-L$${MKLLIB} -lmkl_rt -lpthread"; \
 	  cd $(SOURCE_DIR); \
 	  ./configure --prefix=$(ROOT)/$(PKGROOT) \
