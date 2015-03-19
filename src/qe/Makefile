@@ -96,14 +96,15 @@ build: $(SRC_DIRS)
 	  $(MODULE_LOAD_CC); \
 	  $(MODULE_LOAD_MKL); \
 	  $(MODULE_LOAD_MPI); \
+          export MKLLIB=`find $${MKLHOME}/lib/* -maxdepth 0 | head -1`; \
 	  export CC=mpicc; \
 	  export FC=mpif90; \
-          export CFLAGS="$(COMPILE_FLAGS)"; \
-          export FCFLAGS="$(COMPILE_FLAGS)"; \
-	  export LDFLAGS="-L$${MKLLIB} -lmkl_rt -lpthread"; \
+          export CFLAGS="$(COMPILE_FLAGS) -openmp"; \
+          export FCFLAGS="$(COMPILE_FLAGS) -openmp"; \
+	  export LDFLAGS="-L$${MKLLIB} -lmkl_rt -lpthread -lm"; \
 	  cd $(SOURCE_DIR); \
 	  ./configure --prefix=$(ROOT)/$(PKGROOT) \
-	              --with-scalapack --enable-parallel; \
+	              --with-scalapack=intel --enable-parallel; \
 	  $(MAKE) all \
 	)
 	@echo "::: Package $(NAME) build complete :::"
