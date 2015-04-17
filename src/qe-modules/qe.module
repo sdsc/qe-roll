@@ -5,4 +5,4 @@ setenv QEHOME /opt/qe
 prepend-path PATH /opt/qe/bin
 setenv PSEUDO_DIR /opt/qe/pseudo
 setenv ESPRESSO_PSEUDO /opt/qe/pseudo
-module load ROLLCOMPILER mkl
+module load ROLLCOMPILER ROLLMPI mkl
