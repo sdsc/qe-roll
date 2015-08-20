@@ -77,11 +77,11 @@ LICENSE: $(SRC_DIRS)
 	$(CHECK_LICENSE_FILES)
 	echo GPLv2 > $@
 
-COMPILE_FLAGS = -O2
+COMPILE_FLAGS = -O2 -fopenmp
 ifeq ("$(COMPILERNAME)","intel")
-  COMPILE_FLAGS = -O2 -xHOST
+  COMPILE_FLAGS = -O2 -xHOST -openmp
 else ifeq ("$(COMPILERNAME)","pgi")
-  COMPILE_FLAGS = -fast
+  COMPILE_FLAGS = -fast -mp
 endif
 
 
@@ -99,8 +99,8 @@ build: $(SRC_DIRS)
           export MKLLIB=`find $${MKLHOME}/lib/* -maxdepth 0 | head -1`; \
 	  export CC=mpicc; \
 	  export FC=mpif90; \
-          export CFLAGS="$(COMPILE_FLAGS) -openmp"; \
-          export FCFLAGS="$(COMPILE_FLAGS) -openmp"; \
+          export CFLAGS="$(COMPILE_FLAGS)"; \
+          export FCFLAGS="$(COMPILE_FLAGS)"; \
 	  export LDFLAGS="-L$${MKLLIB} -lmkl_rt -lpthread -lm"; \
 	  cd $(SOURCE_DIR); \
 	  ./configure --prefix=$(ROOT)/$(PKGROOT) \
