@@ -78,10 +78,13 @@ LICENSE: $(SRC_DIRS)
 	echo GPLv2 > $@
 
 COMPILE_FLAGS = -O2 -fopenmp
+SCALAPACK = yes
 ifeq ("$(COMPILERNAME)","intel")
   COMPILE_FLAGS = -O2 -xHOST -openmp
+  SCALAPACK = intel
 else ifeq ("$(COMPILERNAME)","pgi")
   COMPILE_FLAGS = -fast -mp
+  SCALAPACK = yes
 endif
 
 
@@ -104,7 +107,7 @@ build: $(SRC_DIRS)
 	  export LDFLAGS="-L$${MKLLIB} -lmkl_rt -lpthread -lm"; \
 	  cd $(SOURCE_DIR); \
 	  ./configure --prefix=$(ROOT)/$(PKGROOT) \
-	              --with-scalapack=intel --enable-parallel; \
+	              --with-scalapack=$(SCALAPACK) --enable-parallel; \
 	  $(MAKE) all \
 	)
 	@echo "::: Package $(NAME) build complete :::"
