@@ -1,7 +1,7 @@
 PACKAGE     = qe
 CATEGORY    = applications
 
-NAME        = $(PACKAGE)-modules
+NAME        = sdsc-$(PACKAGE)-modules
 RELEASE     = 3
 PKGROOT     = /opt/modulefiles/$(CATEGORY)/$(PACKAGE)
 

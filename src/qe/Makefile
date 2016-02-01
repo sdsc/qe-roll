@@ -131,4 +131,4 @@ install::
 clean::
 	rm -rf $(SOURCE_DIR) DESCRIPTION LICENSE
 	rm -fr $(ATOMIC_DIR) $(NEB_DIR) $(PHONON_DIR) $(PWCOND_DIR) \
-	       $(TDDFPT_DIR) $(XSPECTRA_DIR) PlotPhon QHA
+	       $(TDDFPT_DIR) $(XSPECTRA_DIR) PlotPhon QHA $(SOURCE_GPU_DIR)
