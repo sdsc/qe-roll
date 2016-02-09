@@ -10,7 +10,7 @@ MPINAME := $(firstword $(subst /, ,$(ROLLMPI)))
 
 NAME           = sdsc-qe
 VERSION        = 5.3.0
-RELEASE        = 0
+RELEASE        = 1
 PKGROOT        = /opt/qe
 
 SRC_SUBDIR     = qe
@@ -67,4 +67,4 @@ TAR_GZ_PKGS    = \
   $(SOURCE_PKG) $(ATOMIC_PKG) $(NEB_PKG) $(PHONON_PKG) $(PWCOND_PKG) \
   $(TDDFPT_PKG) $(XSPECTRA_PKG)  $(SOURCE_GPU)
 
-RPM.EXTRAS     = AutoReq:No
+RPM.EXTRAS     = AutoReq:No\nObsoletes: qe
