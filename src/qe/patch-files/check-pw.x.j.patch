@@ -1,5 +1,5 @@
 --- espresso-5.3.0/PW/tests/check-pw.x.j	2016-01-09 00:24:08.000000000 -0800
-+++ patch-files/check-pw.x.j	2016-02-01 14:29:13.442316709 -0800
++++ patch-files/check-pw.x.j	2016-02-10 14:43:16.821376789 -0800
 @@ -2,7 +2,7 @@
  
  # Automated checks for pw.x - PG 2007-2014
@@ -9,15 +9,17 @@
  #
  # You shouldn't need to modify anything below this line.
  #
-@@ -38,7 +38,7 @@
+@@ -38,8 +38,8 @@
  # taken from examples - not sure it is really needed
  if test "`echo -e`" = "-e" ; then ECHO=echo ; else ECHO="echo -e" ; fi
  
 -ESPRESSO_ROOT=`cd ../../ ; pwd`
+-ESPRESSO_TMPDIR=$ESPRESSO_ROOT/tempdir/
 +ESPRESSO_ROOT=ROLLPREFIX
- ESPRESSO_TMPDIR=$ESPRESSO_ROOT/tempdir/
++ESPRESSO_TMPDIR=tempdir
  ESPRESSO_PSEUDO=$ESPRESSO_ROOT/pseudo/
  
+ # no need to specify outdir and pseudo_dir in all *.in files
 @@ -256,7 +256,7 @@
    # run the code in the scratch directory
    #

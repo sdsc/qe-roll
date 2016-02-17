@@ -79,12 +79,14 @@ LICENSE: $(SRC_DIRS)
 
 COMPILE_FLAGS = -O2 -fopenmp
 SCALAPACK = yes
+ifneq ("$(MPINAME)", "$(subst mvapich,,$(MPINAME))")
+SCALAPACK = intel
+endif
+
 ifeq ("$(COMPILERNAME)","intel")
   COMPILE_FLAGS = -O2 -xHOST -openmp
-  SCALAPACK = intel
 else ifeq ("$(COMPILERNAME)","pgi")
   COMPILE_FLAGS = -fast -mp
-  SCALAPACK = yes
 endif
 
 
