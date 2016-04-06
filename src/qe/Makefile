@@ -71,6 +71,7 @@ DESCRIPTION:
 	  $(DESCRIBE_CC); \
 	  $(DESCRIBE_MKL); \
 	  $(DESCRIBE_MPI) \
+          $(DESCRIBE_FFTW); \
 	) > $@
 
 LICENSE: $(SRC_DIRS)
@@ -102,12 +103,14 @@ build: $(SRC_DIRS)
 	  $(MODULE_LOAD_CC); \
 	  $(MODULE_LOAD_MKL); \
 	  $(MODULE_LOAD_MPI); \
+          $(MODULE_LOAD_FFTW); \
           export MKLLIB=`find $${MKLHOME}/lib/* -maxdepth 0 | head -1`; \
 	  export CC=mpicc; \
 	  export FC=mpif90; \
           export CFLAGS="$(COMPILE_FLAGS)"; \
           export FFLAGS="$(COMPILE_FLAGS)"; \
 	  export LDFLAGS="$(LDFLAGS) -L$${MKLLIB} -lmkl_rt -lpthread -lm"; \
+          export CPPFLAGS=-I$${FFTWHOME}/include; \
 	  cd $(SOURCE_DIR); \
 	  ./configure --prefix=$(ROOT)/$(PKGROOT) \
 	              --with-scalapack=$(SCALAPACK) --enable-parallel; \
