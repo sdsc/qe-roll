@@ -105,11 +105,10 @@ build: $(SRC_DIRS)
           export MKLLIB=`find $${MKLHOME}/lib/* -maxdepth 0 | head -1`; \
 	  export CC=mpicc; \
 	  export FC=mpif90; \
-          COMPILE_FLAGS="$(COMPILE_FLAGS) -D__OPENMP -D__DFTI"; \
-          export CFLAGS="$${COMPILE_FLAGS}"; \
-          export FFLAGS="$${COMPILE_FLAGS}"; \
+          export DFLAGS="-D__OPENMP -D__DFTI"; \
+          export CFLAGS="$(COMPILE_FLAGS)"; \
+          export FFLAGS="$(COMPILE_FLAGS)"; \
 	  export LDFLAGS="$(LDFLAGS) -L$${MKLLIB} -lmkl_rt -lpthread -lm"; \
-          export CPPFLAGS=-I$${FFTWHOME}/include; \
 	  cd $(SOURCE_DIR); \
 	  ./configure --prefix=$(ROOT)/$(PKGROOT) \
 	              --with-scalapack=$(SCALAPACK) --enable-parallel; \
