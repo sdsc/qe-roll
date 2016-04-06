@@ -77,17 +77,17 @@ LICENSE: $(SRC_DIRS)
 	$(CHECK_LICENSE_FILES)
 	echo GPLv2 > $@
 
-COMPILE_FLAGS = -O2 -fopenmp
 SCALAPACK = yes
 ifneq ("$(MPINAME)", "$(subst mvapich,,$(MPINAME))")
 SCALAPACK = intel
 endif
 
+COMPILE_FLAGS = -O2 -fopenmp -D__OPENMP
 ifeq ("$(COMPILERNAME)","intel")
-  COMPILE_FLAGS = -O2 -xHOST -openmp
+  COMPILE_FLAGS = -O2 -xHOST -openmp -D__OPENMP
   LDFLAGS=-openmp
 else ifeq ("$(COMPILERNAME)","pgi")
-  COMPILE_FLAGS = -fast -mp
+  COMPILE_FLAGS = -fast -mp -D__OPENMP
 endif
 
 
