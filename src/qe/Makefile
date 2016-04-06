@@ -83,8 +83,10 @@ ifneq ("$(MPINAME)", "$(subst mvapich,,$(MPINAME))")
 SCALAPACK = intel
 endif
 
+unset LDFLAGS
 ifeq ("$(COMPILERNAME)","intel")
   COMPILE_FLAGS = -O2 -xHOST -openmp
+  export LDFLAGS=-openmp
 else ifeq ("$(COMPILERNAME)","pgi")
   COMPILE_FLAGS = -fast -mp
 endif
@@ -106,7 +108,7 @@ build: $(SRC_DIRS)
 	  export FC=mpif90; \
           export CFLAGS="$(COMPILE_FLAGS)"; \
           export FFLAGS="$(COMPILE_FLAGS)"; \
-	  export LDFLAGS="-L$${MKLLIB} -lmkl_rt -lpthread -lm"; \
+	  export LDFLAGS="$${LDFLAGS} -L$${MKLLIB} -lmkl_rt -lpthread -lm"; \
 	  cd $(SOURCE_DIR); \
 	  ./configure --prefix=$(ROOT)/$(PKGROOT) \
 	              --with-scalapack=$(SCALAPACK) --enable-parallel; \
