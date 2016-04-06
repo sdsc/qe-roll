@@ -10,7 +10,7 @@ MPINAME := $(firstword $(subst /, ,$(ROLLMPI)))
 
 NAME           = sdsc-qe
 VERSION        = 5.3.0
-RELEASE        = 1
+RELEASE        = 2
 PKGROOT        = /opt/qe
 
 SRC_SUBDIR     = qe
