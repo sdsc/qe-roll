@@ -109,7 +109,7 @@ build: $(SRC_DIRS)
 	  export FC=mpif90; \
           COMPILE_FLAGS="$(COMPILE_FLAGS) -D__OPENMP -I$${FFTWHOME}/include"; \
           export CFLAGS="$${COMPILE_FLAGS}"; \
-          export FFLAGS="$$(COMPILE_FLAGS}"; \
+          export FFLAGS="$${COMPILE_FLAGS}"; \
 	  export LDFLAGS="$(LDFLAGS) -L$${MKLLIB} -lmkl_rt -lpthread -lm"; \
           export CPPFLAGS=-I$${FFTWHOME}/include; \
 	  cd $(SOURCE_DIR); \
