@@ -105,7 +105,7 @@ build: $(SRC_DIRS)
 	  export CC=mpicc; \
 	  export FC=mpif90; \
           export CFLAGS="$(COMPILE_FLAGS)"; \
-          export FFFLAGS="$(COMPILE_FLAGS)"; \
+          export FFLAGS="$(COMPILE_FLAGS)"; \
 	  export LDFLAGS="-L$${MKLLIB} -lmkl_rt -lpthread -lm"; \
 	  cd $(SOURCE_DIR); \
 	  ./configure --prefix=$(ROOT)/$(PKGROOT) \
