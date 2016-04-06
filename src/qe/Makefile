@@ -83,12 +83,12 @@ ifneq ("$(MPINAME)", "$(subst mvapich,,$(MPINAME))")
 SCALAPACK = intel
 endif
 
-COMPILE_FLAGS = -O2 -fopenmp -D__OPENMP
+COMPILE_FLAGS = -O2 -fopenmp
 ifeq ("$(COMPILERNAME)","intel")
-  COMPILE_FLAGS = -O2 -xHOST -openmp -D__OPENMP
+  COMPILE_FLAGS = -O2 -xHOST -openmp
   LDFLAGS=-openmp
 else ifeq ("$(COMPILERNAME)","pgi")
-  COMPILE_FLAGS = -fast -mp -D__OPENMP
+  COMPILE_FLAGS = -fast -mp
 endif
 
 
@@ -107,8 +107,9 @@ build: $(SRC_DIRS)
           export MKLLIB=`find $${MKLHOME}/lib/* -maxdepth 0 | head -1`; \
 	  export CC=mpicc; \
 	  export FC=mpif90; \
-          export CFLAGS="$(COMPILE_FLAGS)"; \
-          export FFLAGS="$(COMPILE_FLAGS)"; \
+          COMPILE_FLAGS="$(COMPILE_FLAGS) -D__OPENMP -I$${FFTWHOME}/include; \
+          export CFLAGS="$${COMPILE_FLAGS}"; \
+          export FFLAGS="$$(COMPILE_FLAGS}"; \
 	  export LDFLAGS="$(LDFLAGS) -L$${MKLLIB} -lmkl_rt -lpthread -lm"; \
           export CPPFLAGS=-I$${FFTWHOME}/include; \
 	  cd $(SOURCE_DIR); \
