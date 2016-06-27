@@ -107,7 +107,7 @@ build: $(SRC_DIRS)
           export MKLLIB=`find $${MKLHOME}/lib/* -maxdepth 0 | head -1`; \
           export CC=mpicc; \
           export FC=mpif90; \
-          export DFLAGS="-D__OPENMP -D__MPI -D__DFTI"; \
+          export DFLAGS="-D__OPENMP -D__MPI -D__DFTI -D__PARA -D__SCALAPACK "; \
           export CFLAGS="$(COMPILE_FLAGS)"; \
           export FFLAGS="$(COMPILE_FLAGS)"; \
           export LDFLAGS="$(LDFLAGS) -L$${MKLLIB} -lmkl_rt -lpthread -lm"; \
