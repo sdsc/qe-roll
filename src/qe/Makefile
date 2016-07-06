@@ -101,20 +101,20 @@ build: $(SRC_DIRS)
 	-cp $(ATOMIC_PKG) $(NEB_PKG) $(PHONON_PKG) $(PWCOND_PKG) \
 	    $(TDDFPT_PKG) $(XSPECTRA_PKG) $(SOURCE_DIR)/archive/
 	( \
-	  $(MODULE_LOAD_CC); \
-	  $(MODULE_LOAD_MKL); \
-	  $(MODULE_LOAD_MPI); \
+          $(MODULE_LOAD_CC); \
+          $(MODULE_LOAD_MKL); \
+          $(MODULE_LOAD_MPI); \
           export MKLLIB=`find $${MKLHOME}/lib/* -maxdepth 0 | head -1`; \
-	  export CC=mpicc; \
-	  export FC=mpif90; \
-          export DFLAGS="-D__OPENMP -D__DFTI"; \
+          export CC=mpicc; \
+          export FC=mpif90; \
+          export DFLAGS="-D__OPENMP -D__MPI -D__DFTI -D__PARA -D__SCALAPACK "; \
           export CFLAGS="$(COMPILE_FLAGS)"; \
           export FFLAGS="$(COMPILE_FLAGS)"; \
-	  export LDFLAGS="$(LDFLAGS) -L$${MKLLIB} -lmkl_rt -lpthread -lm"; \
-	  cd $(SOURCE_DIR); \
-	  ./configure --prefix=$(ROOT)/$(PKGROOT) \
-	              --with-scalapack=$(SCALAPACK) --enable-parallel; \
-	  $(MAKE) all \
+          export LDFLAGS="$(LDFLAGS) -L$${MKLLIB} -lmkl_rt -lpthread -lm"; \
+          cd $(SOURCE_DIR); \
+          ./configure --prefix=$(ROOT)/$(PKGROOT) \
+              --with-scalapack=$(SCALAPACK) --enable-parallel; \
+          $(MAKE) all \
 	)
 	@echo "::: Package $(NAME) build complete :::"
 
