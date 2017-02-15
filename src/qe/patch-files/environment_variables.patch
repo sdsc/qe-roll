@@ -1,8 +1,16 @@
-20c20
-< PREFIX=`cd ../../.. ; pwd`
----
-> PREFIX=ROLLPREFIX
-24c24
-< TMP_DIR=$PREFIX/tempdir
----
-> TMP_DIR=tempdir
+--- qe-6.0/environment_variables	2016-10-04 03:38:00.000000000 -0700
++++ patch-files/environment_variables	2017-02-15 13:32:42.821172569 -0800
+@@ -17,11 +17,11 @@
+ 
+ # The following should be good for most cases 
+ 
+-PREFIX=`cd ../../.. ; pwd`
++PREFIX=ROLLPREFIX
+ BIN_DIR=$PREFIX/bin
+ PSEUDO_DIR=$PREFIX/pseudo
+ # Beware: everything in $TMP_DIR will be destroyed !
+-TMP_DIR=$PREFIX/tempdir
++TMP_DIR=tempdir
+ 
+ # There should be no need to change anything below this line
+ 

@@ -77,7 +77,7 @@ LICENSE: $(SRC_DIRS)
 	echo GPLv2 > $@
 
 SCALAPACK = yes
-ifneq ("$(MPINAME)", "$(subst mvapich,,$(MPINAME))")
+ifeq ("$(MPINAME)", "$(filter mvapich% intelmpi,$(MPINAME))")
 SCALAPACK = intel
 endif
 
@@ -93,11 +93,8 @@ endif
 
 
 build: $(SRC_DIRS)
-	patch $(SOURCE_DIR)/PW/tests/check-pw.x.j patch-files/check-pw.x.j.patch
-	perl -pi -e "s!ROLLPREFIX!$(PKGROOT)!" $(SOURCE_DIR)/PW/tests/check-pw.x.j
 	patch $(SOURCE_DIR)/environment_variables patch-files/environment_variables.patch
 	perl -pi -e "s!ROLLPREFIX!$(PKGROOT)!" $(SOURCE_DIR)/environment_variables
-	perl -pi -e 's!(dfti_first\s*\.EQ)\.!$$1V.!' $(SOURCE_DIR)/FFTXlib/fft_scalar.DFTI.f90
 	-cp $(ATOMIC_PKG) $(NEB_PKG) $(PHONON_PKG) $(PWCOND_PKG) \
 	    $(TDDFPT_PKG) $(XSPECTRA_PKG) $(SOURCE_DIR)/archive/
 	( \
