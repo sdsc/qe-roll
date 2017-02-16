@@ -123,7 +123,6 @@ install::
 	( \
 	  cd $(SOURCE_DIR); \
 	  cp bin/* $(ROOT)/$(PKGROOT)/bin; \
-	  cp PW/tests/* $(ROOT)/$(PKGROOT)/tests; \
 	  cp environment_variables $(ROOT)/$(PKGROOT)/tests; \
 	  cp pseudo/* $(ROOT)/$(PKGROOT)/pseudo \
 	)
