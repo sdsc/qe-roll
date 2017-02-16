@@ -126,7 +126,6 @@ install::
 	  cp environment_variables $(ROOT)/$(PKGROOT)/tests; \
 	  cp pseudo/* $(ROOT)/$(PKGROOT)/pseudo \
 	)
-	cp patch-files/Ge.pbe-kjpaw.UPF $(ROOT)/$(PKGROOT)/pseudo/
 	$(INSTALL_LICENSE_FILES)
 	@echo "::: Package $(NAME) install complete :::"
 
