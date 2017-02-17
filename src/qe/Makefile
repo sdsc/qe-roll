@@ -121,6 +121,9 @@ install::
 	mkdir -p -m 755 $(ROOT)/$(PKGROOT)/tests
 	mkdir -p -m 755 $(ROOT)/$(PKGROOT)/pseudo
 	( \
+          cp -r $(EXAMPLE_SOURCE_DIR)/NEB/* $(ROOT)/$(PKGROOT)/tests; \
+          patch $(ROOT)/$(PKGROOT)/tests/check-neb.x.j patch-files/check-neb.x.j.patch; \
+	  perl -pi -e "s!ROLLPREFIX!$(PKGROOT)!" $(ROOT)/$(PKGROOT)/tests/check-neb.x.j; \
 	  cd $(SOURCE_DIR); \
 	  cp bin/* $(ROOT)/$(PKGROOT)/bin; \
 	  cp environment_variables $(ROOT)/$(PKGROOT)/tests; \
@@ -130,6 +133,4 @@ install::
 	@echo "::: Package $(NAME) install complete :::"
 
 clean::
-	rm -rf $(SOURCE_DIR) DESCRIPTION LICENSE
-	rm -fr $(ATOMIC_DIR) $(NEB_DIR) $(PHONON_DIR) $(PWCOND_DIR) \
-	       $(TDDFPT_DIR) $(XSPECTRA_DIR) PlotPhon QHA $(SOURCE_GPU_DIR)
+	rm -rf $(SOURCE_DIR) $(EXAMPLE_SOURCE_DIR) DESCRIPTION LICENSE
