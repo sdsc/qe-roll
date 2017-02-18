@@ -33,7 +33,7 @@ module load qe
 END
   close(OUT);
  `/bin/bash $TESTFILE.sh >& $TESTFILE.out`;
-  ok(`grep -c 'grep -c 'Parallel version' $TESTFILE.dir/neb1.out ` == 1, 'quantum espresso will run in parallel');
+  ok(`grep -c 'Parallel version' $TESTFILE.dir/neb1.out` == 1, 'quantum espresso will run in parallel');
   ok(`grep -c passed $TESTFILE.out` >= 3, 'quantum espresso works');
 }
 
