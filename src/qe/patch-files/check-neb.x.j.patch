@@ -1,0 +1,75 @@
+--- Examples/NEB/check-neb.x.j	2016-10-04 03:38:00.000000000 -0700
++++ patch-files/check-neb.x.j	2017-02-16 19:25:08.518005419 -0800
+@@ -7,9 +7,9 @@
+ # taken from examples - not sure it is really needed
+ if test "`echo -e`" = "-e" ; then ECHO=echo ; else ECHO="echo -e" ; fi
+ 
+-ESPRESSO_ROOT=`cd ../.. ; pwd`
+-. $ESPRESSO_ROOT/environment_variables
+-ESPRESSO_TMPDIR=$ESPRESSO_ROOT/tempdir/
++ESPRESSO_ROOT=ROLLPREFIX
++. $ESPRESSO_ROOT/tests/environment_variables
++ESPRESSO_TMPDIR=.
+ ESPRESSO_PSEUDO=$ESPRESSO_ROOT/pseudo/
+ 
+ # no need to specify outdir and pseudo_dir in all *.in files
+@@ -28,7 +28,7 @@
+ 
+ if test $# = 0
+ then
+-    files=`/bin/ls *.in`
++    files=`/bin/ls $ESPRESSO_ROOT/tests/*.in`
+ else
+     files=`/bin/ls $*| grep "\.in$"`
+ fi
+@@ -37,7 +37,7 @@
+ # function to get pseudopotentials from the web if missing
+ ########################################################################
+ get_pp () {
+-    ppfiles=`grep UPF $1.in | awk '{print $3}'`
++    ppfiles=`grep UPF $ESPRESSO_ROOT/tests/$1.in | awk '{print $3}'`
+     for ppfile in $ppfiles
+     do
+ 	if ! test -f $ESPRESSO_PSEUDO/$ppfile ; then
+@@ -61,9 +61,9 @@
+ ########################################################################
+ check_neb () {
+   # get reference number of neb iterations
+-  n0=`grep 'neb: convergence' $1.ref | awk '{print $1}'`
++  n0=`grep 'neb: convergence' $ESPRESSO_ROOT/tests/$1.ref | awk '{print $1}'`
+   # get reference activation energy (truncated to 4 significant digits)
+-  e0=`grep 'activation energy' $1.ref | tail -1 | awk '{printf "%8.4f\n", $5}'`
++  e0=`grep 'activation energy' $ESPRESSO_ROOT/tests/$1.ref | tail -1 | awk '{printf "%8.4f\n", $5}'`
+   #
+   n1=`grep 'neb: convergence' $1.out | awk '{print $1}'`
+   e1=`grep 'activation energy' $1.out | tail -1 | awk '{printf "%8.4f\n", $5}'`
+@@ -91,7 +91,7 @@
+ get_times () {
+   # convert from "1h23m45.6s" to seconds
+   # the following line prevents cases such as "2m 7.5s"
+-  grep 'WALL$' $1.ref | sed 's/m /m0/' > $1.tmp 
++  grep 'WALL$' $ESPRESSO_ROOT/tests/$1.ref | sed 's/m /m0/' > $1.tmp 
+   # in order to get cpu instead of wall time, replace $3 to $5
+   tref=`awk '{ str = $5; h = m = s = 0;
+                   if (split(str, x, "h") == 2) { h = x[1]; str = x[2]; }
+@@ -127,7 +127,7 @@
+   #
+   cd $ESPRESSO_TMPDIR
+   $PARA_PREFIX $ESPRESSO_ROOT/bin/neb.x $PARA_POSTFIX \
+-        -inp $TESTDIR/$name.in > $TESTDIR/$name.out 2> /dev/null
++        -inp $ESPRESSO_ROOT/tests/$name.in > $TESTDIR/$name.out 2> /dev/null
+   if test $? != 0; then
+      $ECHO "FAILED with error condition!"
+      $ECHO "Input: $name.in, Output: $name.out, Reference: $name.ref"
+@@ -137,9 +137,9 @@
+   #
+   cd $TESTDIR
+   ###
+-  if test -f $name.ref ; then
++  if test -f $ESPRESSO_ROOT/tests/$name.ref ; then
+      # reference file exists
+-     if grep 'neb: convergence achieved' $name.ref > /dev/null; then
++     if grep 'neb: convergence achieved' $ESPRESSO_ROOT/tests/$name.ref > /dev/null; then
+         # Specific test for NEB
+ 	check_neb $name
+         #

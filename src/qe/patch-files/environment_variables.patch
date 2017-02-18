@@ -1,5 +1,5 @@
 --- qe-6.0/environment_variables	2016-10-04 03:38:00.000000000 -0700
-+++ patch-files/environment_variables	2017-02-15 13:32:42.821172569 -0800
++++ patch-files/environment_variables	2017-02-17 15:48:53.688463978 -0800
 @@ -17,11 +17,11 @@
  
  # The following should be good for most cases 
@@ -14,3 +14,13 @@
  
  # There should be no need to change anything below this line
  
+@@ -56,8 +56,7 @@
+ # a small number of processors; do not use tests and examples to benchmark
+ # parallelism, do not run on too many processors
+ 
+-PARA_PREFIX="mpirun -np 2"
+-PARA_PREFIX=" "
++PARA_PREFIX="mpirun -np 4"
+ #
+ # available flags: 
+ #                  -ni n        number of images        (or -nimage)
