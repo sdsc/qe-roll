@@ -1,5 +1,5 @@
 --- qe-6.0/environment_variables	2016-10-04 03:38:00.000000000 -0700
-+++ patch-files/environment_variables	2017-02-17 15:48:53.688463978 -0800
++++ patch-files/environment_variables	2017-03-02 19:37:53.075682251 -0800
 @@ -17,11 +17,11 @@
  
  # The following should be good for most cases 
@@ -20,7 +20,7 @@
  
 -PARA_PREFIX="mpirun -np 2"
 -PARA_PREFIX=" "
-+PARA_PREFIX="mpirun -np 4"
++PARA_PREFIX="mpirun RUNASROOT -np 4"
  #
  # available flags: 
  #                  -ni n        number of images        (or -nimage)

@@ -97,6 +97,12 @@ build: $(SRC_DIRS)
 	perl -pi -e "s!ROLLPREFIX!$(PKGROOT)!" $(SOURCE_DIR)/environment_variables
 	-cp $(ATOMIC_PKG) $(NEB_PKG) $(PHONON_PKG) $(PWCOND_PKG) \
 	    $(TDDFPT_PKG) $(XSPECTRA_PKG) $(SOURCE_DIR)/archive/
+	if [[ "$(MPINAME)" =~ "openmpi" ]]; then \
+            perl -pi -e "s!RUNASROOT!--allow-run-as-root!" $(SOURCE_DIR)/environment_variables; \
+        else \
+            perl -pi -e "s!RUNASROOT!!" $(SOURCE_DIR)/environment_variables; \
+        fi
+
 	( \
           $(MODULE_LOAD_CC); \
           $(MODULE_LOAD_MKL); \
