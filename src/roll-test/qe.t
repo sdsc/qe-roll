@@ -29,12 +29,12 @@ mkdir $TESTFILE.dir
 cd $TESTFILE.dir
 cp -r /opt/qe/tests/* .
 module load qe
-/opt/qe/tests/check-pw.x.j paw-vcbfgs.in
+/opt/qe/tests/check-neb.x.j
 END
   close(OUT);
  `/bin/bash $TESTFILE.sh >& $TESTFILE.out`;
-  ok(`grep -c 'Parallel version' $TESTFILE.dir/paw-vcbfgs.out ` == 1, 'quantum espresso will run in parallel');
-  ok(`grep -c passed $TESTFILE.out` == 1, 'quantum espresso works');
+  ok(`grep -c 'Parallel version' $TESTFILE.dir/neb1.out` == 1, 'quantum espresso will run in parallel');
+  ok(`grep -c passed $TESTFILE.out` >= 3, 'quantum espresso works');
 }
 
 SKIP: {

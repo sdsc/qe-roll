@@ -77,7 +77,7 @@ LICENSE: $(SRC_DIRS)
 	echo GPLv2 > $@
 
 SCALAPACK = yes
-ifneq ("$(MPINAME)", "$(subst mvapich,,$(MPINAME))")
+ifeq ("$(MPINAME)", "$(filter mvapich% intelmpi,$(MPINAME))")
 SCALAPACK = intel
 endif
 
@@ -93,13 +93,16 @@ endif
 
 
 build: $(SRC_DIRS)
-	patch $(SOURCE_DIR)/PW/tests/check-pw.x.j patch-files/check-pw.x.j.patch
-	perl -pi -e "s!ROLLPREFIX!$(PKGROOT)!" $(SOURCE_DIR)/PW/tests/check-pw.x.j
 	patch $(SOURCE_DIR)/environment_variables patch-files/environment_variables.patch
 	perl -pi -e "s!ROLLPREFIX!$(PKGROOT)!" $(SOURCE_DIR)/environment_variables
-	perl -pi -e 's!(dfti_first\s*\.EQ)\.!$$1V.!' $(SOURCE_DIR)/FFTXlib/fft_scalar.DFTI.f90
 	-cp $(ATOMIC_PKG) $(NEB_PKG) $(PHONON_PKG) $(PWCOND_PKG) \
 	    $(TDDFPT_PKG) $(XSPECTRA_PKG) $(SOURCE_DIR)/archive/
+	if [[ "$(MPINAME)" =~ "openmpi" ]]; then \
+            perl -pi -e "s!RUNASROOT!--allow-run-as-root!" $(SOURCE_DIR)/environment_variables; \
+        else \
+            perl -pi -e "s!RUNASROOT!!" $(SOURCE_DIR)/environment_variables; \
+        fi
+
 	( \
           $(MODULE_LOAD_CC); \
           $(MODULE_LOAD_MKL); \
@@ -124,17 +127,16 @@ install::
 	mkdir -p -m 755 $(ROOT)/$(PKGROOT)/tests
 	mkdir -p -m 755 $(ROOT)/$(PKGROOT)/pseudo
 	( \
+          cp -r $(EXAMPLE_SOURCE_DIR)/NEB/* $(ROOT)/$(PKGROOT)/tests; \
+          patch $(ROOT)/$(PKGROOT)/tests/check-neb.x.j patch-files/check-neb.x.j.patch; \
+	  perl -pi -e "s!ROLLPREFIX!$(PKGROOT)!" $(ROOT)/$(PKGROOT)/tests/check-neb.x.j; \
 	  cd $(SOURCE_DIR); \
 	  cp bin/* $(ROOT)/$(PKGROOT)/bin; \
-	  cp PW/tests/* $(ROOT)/$(PKGROOT)/tests; \
 	  cp environment_variables $(ROOT)/$(PKGROOT)/tests; \
 	  cp pseudo/* $(ROOT)/$(PKGROOT)/pseudo \
 	)
-	cp patch-files/Ge.pbe-kjpaw.UPF $(ROOT)/$(PKGROOT)/pseudo/
 	$(INSTALL_LICENSE_FILES)
 	@echo "::: Package $(NAME) install complete :::"
 
 clean::
-	rm -rf $(SOURCE_DIR) DESCRIPTION LICENSE
-	rm -fr $(ATOMIC_DIR) $(NEB_DIR) $(PHONON_DIR) $(PWCOND_DIR) \
-	       $(TDDFPT_DIR) $(XSPECTRA_DIR) PlotPhon QHA $(SOURCE_GPU_DIR)
+	rm -rf $(SOURCE_DIR) $(EXAMPLE_SOURCE_DIR) DESCRIPTION LICENSE

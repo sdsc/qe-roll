@@ -1,6 +1,6 @@
 NAME       = sdsc-qe-roll-test
-VERSION    = 1
-RELEASE    = 4
+VERSION    = 2
+RELEASE    = 0
 PKGROOT    = /root/rolltests
 
 RPM.EXTRAS     = AutoReq:No\nObsoletes: qe-roll-test
