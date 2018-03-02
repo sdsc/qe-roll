@@ -10,7 +10,7 @@ MPINAME := $(firstword $(subst /, ,$(ROLLMPI)))
 
 NAME           = sdsc-qe
 VERSION        = 6.0
-RELEASE        = 2
+RELEASE        = 3
 PKGROOT        = /opt/qe
 
 SRC_SUBDIR     = qe
@@ -29,4 +29,5 @@ EXAMPLE_SOURCE_DIR     = Examples
 
 TAR_GZ_PKGS    = $(SOURCE_PKG) $(EXAMPLE_SOURCE_PKG)
 
-RPM.EXTRAS     = AutoReq:No\nObsoletes: qe
+RPM.EXTRAS     = AutoReq:No\nAutoProv:No\nObsoletes: qe
+RPM.PREFIX     = $(PKGROOT)
