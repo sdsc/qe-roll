@@ -129,7 +129,7 @@ install::
 	mkdir -p -m 755 $(ROOT)/$(PKGROOT)/pseudo
 	( \
           cp -r $(EXAMPLE_SOURCE_DIR)/NEB/* $(ROOT)/$(PKGROOT)/tests; \
-          patch $(ROOT)/$(PKGROOT)/tests/check-neb.x.j patch-files/check-neb.x.j.patch; \
+          patch $(ROOT)/$(PKGROOT)/NEB/examples/check-neb.x.j patch-files/check-neb.x.j.patch; \
 	  perl -pi -e "s!ROLLPREFIX!$(PKGROOT)!" $(ROOT)/$(PKGROOT)/tests/check-neb.x.j; \
 	  cd $(SOURCE_DIR); \
 	  cp bin/* $(ROOT)/$(PKGROOT)/bin; \

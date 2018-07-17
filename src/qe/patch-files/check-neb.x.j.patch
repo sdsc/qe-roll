@@ -1,5 +1,5 @@
---- Examples/NEB/check-neb.x.j	2016-10-04 03:38:00.000000000 -0700
-+++ patch-files/check-neb.x.j	2017-02-16 19:25:08.518005419 -0800
+--- qe-6.3/NEB/examples/check-neb.x.j	2018-07-06 08:36:48.000000000 -0700
++++ patch-files/check-neb.x.j	2018-07-17 08:02:04.287701049 -0700
 @@ -7,9 +7,9 @@
  # taken from examples - not sure it is really needed
  if test "`echo -e`" = "-e" ; then ECHO=echo ; else ECHO="echo -e" ; fi
@@ -48,7 +48,7 @@
    # convert from "1h23m45.6s" to seconds
    # the following line prevents cases such as "2m 7.5s"
 -  grep 'WALL$' $1.ref | sed 's/m /m0/' > $1.tmp 
-+  grep 'WALL$' $ESPRESSO_ROOT/tests/$1.ref | sed 's/m /m0/' > $1.tmp 
++  grep 'WALL$' $ESPRESSO_ROOT/tests/$1.ref | sed 's/m /m0/' > $1.tmp
    # in order to get cpu instead of wall time, replace $3 to $5
    tref=`awk '{ str = $5; h = m = s = 0;
                    if (split(str, x, "h") == 2) { h = x[1]; str = x[2]; }
@@ -61,15 +61,11 @@
    if test $? != 0; then
       $ECHO "FAILED with error condition!"
       $ECHO "Input: $name.in, Output: $name.out, Reference: $name.ref"
-@@ -137,9 +137,9 @@
-   #
+@@ -138,6 +138,7 @@
    cd $TESTDIR
    ###
--  if test -f $name.ref ; then
+   if test -f $name.ref ; then
 +  if test -f $ESPRESSO_ROOT/tests/$name.ref ; then
       # reference file exists
--     if grep 'neb: convergence achieved' $name.ref > /dev/null; then
-+     if grep 'neb: convergence achieved' $ESPRESSO_ROOT/tests/$name.ref > /dev/null; then
+      if grep 'neb: convergence achieved' $name.ref > /dev/null; then
          # Specific test for NEB
- 	check_neb $name
-         #

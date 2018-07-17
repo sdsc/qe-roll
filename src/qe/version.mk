@@ -9,8 +9,8 @@ endif
 MPINAME := $(firstword $(subst /, ,$(ROLLMPI)))
 
 NAME           = sdsc-qe
-VERSION        = 6.0
-RELEASE        = 3
+VERSION        = 6.3
+RELEASE        = 0
 PKGROOT        = /opt/qe
 
 SRC_SUBDIR     = qe
