@@ -84,8 +84,8 @@ COMPILE_FLAGS = -O2 -fopenmp
 ifeq ("$(COMPILERNAME)","gnu")
   LDFLAGS = -lgomp
 else ifeq ("$(COMPILERNAME)","intel")
-  COMPILE_FLAGS = -O2 -xHOST -openmp
-  LDFLAGS=-openmp
+  COMPILE_FLAGS = -O2 -xHOST -qopenmp
+  LDFLAGS=-qopenmp
 else ifeq ("$(COMPILERNAME)","pgi")
   COMPILE_FLAGS = -fast -mp
 endif
