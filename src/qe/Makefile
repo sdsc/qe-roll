@@ -118,8 +118,8 @@ build: $(SRC_DIRS)
           cd $(SOURCE_DIR); \
           ./configure --prefix=$(ROOT)/$(PKGROOT) \
               --with-scalapack=$(SCALAPACK) --enable-parallel; \
-          $(MAKE) -j 16 all; \
-          $(MAKE) -j 16 epw \
+          $(MAKE) -j `/bin/nproc --ignore=2` all; \
+          $(MAKE) -j `/bin/nproc --ignore=2` epw \
 	)
 	@echo "::: Package $(NAME) build complete :::"
 
